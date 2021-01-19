@@ -2,7 +2,7 @@
 
 Simple Ledger Protocol is a token system for the Bitcoin Cash network.
 It allows users to create, issue, and transfer digital tokens that enjoy the same security model and network of Bitcoin Cash.
-Users can associate the created tokens with assets and values, and thus, utilize the [Blockchain](/protocol/blockchain.md) as the public ledger to achieve transparency and integrity for their transactions.
+Users can associate the created tokens with assets and values, and thus, utilize the [Blockchain](/protocol/blockchain) as the public ledger to achieve transparency and integrity for their transactions.
 
 
 ## The intent of token systems
@@ -18,9 +18,9 @@ Users and creators of the tokens can utilize the computational power and other b
 ## The design of Simple Ledger Protocol
 
 Simple Ledger Protocol (SLP) is one of the most prevalent token systems on Bitcoin Cash.
-SLP employs a “colored coins” design that associates token amounts with BCH [transaction](/protocol/blockchain/transaction.md) outputs.
+SLP employs a “colored coins” design that associates token amounts with BCH [transaction](/protocol/blockchain/transaction) outputs.
 The first output of an SLP transaction will utilize the OP_RETURN to return messages with the predefined format to annotate the amount of SLP tokens associated with each transaction output in the same transaction.
-The message returned by OP_RETURN are from one of four predefined formats: [GENESIS](/protocol/slp/genesis.md), [MINT](protocol/slp/mint.md), [SEND](/protocol/slp/send.md), and [COMMIT](/protocol/slp/commit.md).
+The message returned by OP_RETURN are from one of four predefined formats: [GENESIS](/protocol/slp/genesis), [MINT](protocol/slp/mint), [SEND](/protocol/slp/send), and [COMMIT](/protocol/slp/commit).
 The GENESIS message defines the SLP token and issues the first batch of tokens.
 The MINT message issues further batches of tokens.
 The SEND message denotes the number of tokens sent to each output.
@@ -29,7 +29,7 @@ The COMMIT message is proposed to allow periodical commits of all transaction ha
 
 ## Consensus rules
 
-In all cases of SLP transactions, there must be an [output script](/protocol/blockchain/transaction/unlocking-script.md) that begins with OP_RETURN (opcode 0x6a) within the first output (vout=0).
+In all cases of SLP transactions, there must be an [output script](/protocol/blockchain/transaction/unlocking-script) that begins with OP_RETURN (opcode 0x6a) within the first output (vout=0).
 The data output should be an SLP message that conforms to the predefined format.
 
 
