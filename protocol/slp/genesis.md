@@ -14,7 +14,7 @@ The token is thereafter uniquely identified by the token genesis transaction has
 This document specifies the rules and operation of the Permissionless Token Type (1) only.
 Tokens of different types cannot be mixed, and so future specifications of other token types will not affect the consensus validity of type 1.
 
-`mint_baton_vout`: Future token supply increases are made possible if the genesis endows a specific transaction output with a "minting baton" that can be passed along and used for future minting (using ['MINT'](/protocol/slp/mint.md) transactions)
+`mint_baton_vout`: Future token supply increases are made possible if the genesis endows a specific transaction output with a "minting baton" that can be passed along and used for future minting (using ['MINT'](/protocol/slp/mint) transactions)
 If `mint_baton_vout` is not present or refers to a nonexistent output, then the baton does not exist and the token provably has a one-time issuance.
 
 `decimals`: indicates that 1 token is divisible into 10^`decimals` base units
