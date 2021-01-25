@@ -35,8 +35,6 @@ The genesis transaction includes an initial minting of `initial_token_mint_quant
 | ... | Any | any<sup>2</sup> | 0 |
 | M | (M=mint_baton_vout) Mint baton receiver | any<sup>2</sup> | 0<br>+ 'baton' |
 | ... | Any | any<sup>2</sup> | 0 |
-You can now import Markdown table code directly using File/Paste table data..
-dialog.
 
 
 
