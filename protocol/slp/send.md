@@ -2,11 +2,11 @@
 
 The following transaction format is used to transfer tokens from one or more token holding UTXO(s) to new token holding UTXO(s).
 The UTXOs associated with unspent tokens will be used within the transaction input and, just like the BCH attached to these UTXOs, will be considered totally spent after this transaction is accepted by the blockchain.
-Tokens will be assigned to new UTXOs vout=1 up to vout=19 as indicated within the OP_RETURN statement.
+Tokens will be assigned to new UTXOs outputs with indexes 1 to 19 as indicated within the OP_RETURN statement.
 Any number of additional BCH-only outputs will be allowed.
 A BCH-only output can come before token outputs, but a token quantity of 0 must be specified for this output.
 
-**Transaction inputs**: Any number of inputs or content of inputs, in any order, but must include sufficient tokens coming from valid token transactions of matching `token_id`, `token_type` (see Consensus Rules).
+**Transaction inputs**: Any number of inputs or content of inputs, in any order, but must include sufficient tokens coming from valid token transactions of matching `token_id`, `token_type` (see [Consensus Rules](/protocol/slp/slp#Consensus-Rules)).
 
 **Transaction outputs**:
 
