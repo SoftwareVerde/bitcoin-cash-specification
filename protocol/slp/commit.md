@@ -5,7 +5,7 @@ Although this is not part of the consensus rules (commitments may occur outside 
 This increases confidence that tokens will be judged as expected at the time of redemption.
 
 Initial implementations will focus on supporting the consensus-based forms of validation, and so at this time the exact format for the commitment document is not specified.
-The general ideas will be:
+General expectations of a commitment format should include:
 
 * The committed information will be in regards to only the transactions that exist in the blockchain leading up to and including the block with hash `for_bitcoin_block_hash`.
 (If the block is orphaned, users should ignore this commitment.) The chain height of this block will be stored in the integer `block_height` (even though this is redundant, it aids in lookup for light wallets).
