@@ -19,7 +19,7 @@ Users and creators of the tokens can utilize the computational power and other b
 
 Simple Ledger Protocol (SLP) is one of the most prevalent token systems on Bitcoin Cash.
 SLP employs a “colored coins” design that associates token amounts with BCH [transaction](/protocol/blockchain/transaction) outputs.
-An SLP transaction will untilize a [data output](/protocol/blockchain/transaction/locking-script#data-output) to include a message in one of four predefined formats to annotate the SLP transaction information associated with each transaction output in the same transaction.
+An SLP transaction will utilize a [data output](/protocol/blockchain/transaction/locking-script#data-output) to include a message in one of four predefined formats to annotate the SLP transaction information associated with each transaction output in the same transaction.
 The predefined formats include: [GENESIS](/protocol/slp/genesis), [MINT](protocol/slp/mint), [SEND](/protocol/slp/send), and [COMMIT](/protocol/slp/commit).
 The GENESIS message defines the SLP token and issues the first batch of tokens.
 The MINT message issues further batches of tokens.
@@ -60,7 +60,7 @@ The process can also stop before the full DAG is constructed when the sum of pro
 Without DAG proofs, other validation methods are also available.
 Users can trust SLP transactions with incomplete DAG proofs.
 However, such proofs can be exploited since an attacker can "bury" their invalid transaction by forging another transaction that seems to be valid by itself and spend the output of the invalid transaction.
-Such process can be repeatedly applied, resulting in a chain of transactions on top of the invalid transaction.
+This process can be repeatedly applied, resulting in a chain of transactions on top of the invalid transaction.
 In such cases, the incomplete DAG may only capture the seemingly valid chain of transactions and thus, may produce a false proof.
 Users can also rely on third-party API or block explorer for validation.
 If checkpoints are available for the token, users can also use DAG proofs that terminate at transactions included the checkpoints to validate transactions of the said token.
@@ -71,11 +71,9 @@ If checkpoints are available for the token, users can also use DAG proofs that t
 SLP is non-invasive, such that it does not make any change to Bitcoin Cash protocols.
 Therefore, transactions that carry SLP tokens can be accepted and validated in the same way as typical BCH transactions by the network.
 Meanwhile, the “colored coins” design allows SLP tokens to utilize the same security model of BCH since any attempts to double-spend SLP tokens will also double-spend the associated BCH transaction outputs, which will be rejected by the network.
-However, since tokens are considered spent once their associated output are spent, token inputs of valid BCH transactions will always be spent, even if the token transactions within the messages are invalid or no token transaction is included.
+However, since tokens are considered spent once their associated output is spent, token inputs of valid BCH transactions will always be spent, even if the token transactions within the messages are invalid or no token transaction is included.
 Therefore, there is a risk that if wallet applications are not aware of the SLP tokens associated with certain BCH UTXOs or submitted invalid SLP transactions, due to bugs or unexpected errors, users may lose their SLP tokens with no possible remedies.
 Also due to the “colored coins” design, SLP transactions must still obey the consensus rules of BCH transactions.
 Therefore, outputs with SLP tokens would need to be above the dust threshold, and if the total BCH satoshis of the inputs with SLP tokens cannot afford the satoshis of the outputs, additional BCH satoshis input must be included.
 Thus, users of SLP tokens may have to possess BCH satoshis in addition to the “colored coins” to facilitate their SLP transactions.
 Such inconvenience, however, may be resolved through Postage services.
-
-
