@@ -19,8 +19,8 @@ Users and creators of the tokens can utilize the computational power and other b
 
 Simple Ledger Protocol (SLP) is one of the most prevalent token systems on Bitcoin Cash.
 SLP employs a “colored coins” design that associates token amounts with BCH [transaction](/protocol/blockchain/transaction) outputs.
-The first output of an SLP transaction will utilize the OP_RETURN opcode to include a message in a predefined format to annotate the amount of SLP tokens associated with each transaction output in the same transaction.
-The message returned by OP_RETURN are from one of four predefined formats: [GENESIS](/protocol/slp/genesis), [MINT](protocol/slp/mint), [SEND](/protocol/slp/send), and [COMMIT](/protocol/slp/commit).
+An SLP transaction will untilize a [data output](/protocol/blockchain/transaction/locking-script#data-output) to include a message in one of four predefined formats to annotate the SLP transaction information associated with each transaction output in the same transaction.
+The predefined formats include: [GENESIS](/protocol/slp/genesis), [MINT](protocol/slp/mint), [SEND](/protocol/slp/send), and [COMMIT](/protocol/slp/commit).
 The GENESIS message defines the SLP token and issues the first batch of tokens.
 The MINT message issues further batches of tokens.
 The SEND message denotes the number of tokens sent to each output.
@@ -59,7 +59,7 @@ The process can also stop before the full DAG is constructed when the sum of pro
 
 Without DAG proofs, other validation methods are also available.
 Users can trust SLP transactions with incomplete DAG proofs.
-However, such proofs can be exploited since the attacker can "bury" their invalid transaction by forging another transaction that seem to be valid by itself and spend the output of the invalid transaction.
+However, such proofs can be exploited since an attacker can "bury" their invalid transaction by forging another transaction that seems to be valid by itself and spend the output of the invalid transaction.
 Such process can be repeatedly applied, resulting in a chain of transactions on top of the invalid transaction.
 In such cases, the incomplete DAG may only capture the seemingly valid chain of transactions and thus, may produce a false proof.
 Users can also rely on third-party API or block explorer for validation.
