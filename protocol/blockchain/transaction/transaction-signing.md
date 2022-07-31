@@ -127,7 +127,7 @@ The resulting script is what is included in the signature preimage.
 If the hash type is `SIGHASH_NONE` then the hash should be all `0x00` bytes.
 
 If hash type is `SIGHASH_SINGLE` then only the output with the same index as the input being signed is included.
-If no such output exists (i.e. there are fewer outputs than the index of the input to be signed), this is again all `0x00` bytes.
+If no such output exists (i.e. there are fewer outputs than the index of the input to be signed), this is constant `0x0100000000000000000000000000000000000000000000000000000000000000`.
 
 Otherwise, all outputs of the transaction should be signed (i.e. `SIGHASH_ALL`).
 
