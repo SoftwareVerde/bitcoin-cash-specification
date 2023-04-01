@@ -1,0 +1,30 @@
+name: ci 
+on:
+  push:
+    branches:
+      - master
+
+env:
+  PYTHON_VERSION: 3.x
+
+permissions:
+  contents: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    if: github.event.repository.fork == false
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      - uses: actions/cache@v3
+        id: cache
+        with:
+          key: ${{ runner.os }}-${{ hashFiles('.cache/**') }}
+          path: .cache
+      - run: pip install -r requirements.txt
+      - run: make deploy

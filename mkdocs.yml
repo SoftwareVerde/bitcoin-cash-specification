@@ -1,0 +1,87 @@
+site_name: Bitcoin Cash protocol & consensus specifications
+site_url: https://documentation.cash/
+site_description: Specification of the Bitcoin Cash protocols and consensus
+
+repo_name: SoftwareVerde/bitcoin-cash-specification
+repo_url: https://github.com/SoftwareVerde/bitcoin-cash-specification
+edit_uri: blob/master/
+
+plugins:
+  - search
+  - awesome-pages
+  - minify:
+      minify_html: true
+
+markdown_extensions:
+  - abbr # Add support for abbreviations
+  - admonition # Add support for Material for MkDocs admonitions
+  - attr_list # Add styles for buttons
+  - md_in_html # Add support for grid cards
+  - pymdownx.details # Make admonitions collapsible
+  - pymdownx.emoji: # Add emoji support
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg
+  - pymdownx.superfences: # Add support for arbitrary nesting of code and content blocks inside each other.
+      custom_fences:
+          - name: mermaid
+            class: mermaid
+            format: !!python/name:pymdownx.superfences.fence_code_format
+  - toc:
+      permalink: true # Add link next to header that allows the user to get a permalink to the heading (user still needs to copy the URL in the address bar).
+
+theme:
+  name: material
+  favicon: assets/favicon.png
+  logo: assets/logo.svg
+  icon:
+    repo: fontawesome/brands/github # Add icon to show repository information and link
+    admonition: # Add icons for Material for MkDocs admonitions
+      note: fontawesome/solid/note-sticky
+      abstract: fontawesome/solid/book
+      info: fontawesome/solid/circle-info
+      tip: fontawesome/solid/bullhorn
+      success: fontawesome/solid/check
+      question: fontawesome/solid/circle-question
+      warning: fontawesome/solid/triangle-exclamation
+      failure: fontawesome/solid/bomb
+      danger: fontawesome/solid/skull
+      bug: fontawesome/solid/robot
+      example: fontawesome/solid/flask
+      quote: fontawesome/solid/quote-left
+  palette:
+    - media: "(prefers-color-scheme: light)" # Palette toggle for light mode
+      scheme: default
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to dark mode
+      primary: blue
+      accent: blue
+    - media: "(prefers-color-scheme: dark)" # Palette toggle for dark mode
+      scheme: slate
+      toggle:
+        icon: material/weather-night
+        name: Switch to system preference
+      primary: blue
+      accent: blue
+  features:
+    - announce.dismiss # Mark announcement as read
+    - search.highlight
+    - search.share
+    - search.suggest
+    #- navigation.expand
+    - navigation.footer
+    - navigation.indexes
+    - navigation.instant
+    #- navigation.sections
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.top
+    - navigation.tracking
+
+extra_css:
+  - stylesheets/extra.css
+
+copyright: >
+  &copy; Software Verde
+
+# nav: # For navigation, see the `.pages` file.
