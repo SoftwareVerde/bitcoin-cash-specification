@@ -1,0 +1,50 @@
+/* All settings added as a test for unified docs site at work. */
+
+/* Maximum space for text block */
+.md-grid {
+  max-width: 100%; /* or 100%, if you want to stretch to full-width */
+}
+.md-content {
+  border-left-style: solid;
+  border-left-width: 1px;
+  border-color: #b0b0b0;
+}
+
+.md-nav--secondary {
+  border-left-style: solid;
+  border-left-width: 1px;
+  border-color: #b0b0b0;
+}
+
+/* Change color of navigation header on desktop */
+.md-header {
+  --md-primary-fg-color: #2E303E; /* hsla(var(--md-hue), 15%,21%,1); */
+}
+
+/* Change color of navigation header on mobile to match color on desktop */
+.md-nav--primary .md-nav__title[for=__drawer] {
+  background-color: #2E303E;
+}
+
+/* Change color of navigation subheader on mobile to match color on desktop */
+.md-nav__source {
+  background-color: #2E303E;
+}
+
+.md-header--shadow {
+  box-shadow: none;
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
+  border-bottom-color: #b0b0b0;
+}
+
+/* Change color of buttons to match Bitcoin Cash brand color (green) */
+.md-typeset .md-button {
+  --md-primary-fg-color: #0AC18E;
+  --md-accent-fg-color: #00DB9E;
+  --md-primary-fg-color--light: #0AC18E;
+  --md-accent-fg-color--light: #00DB9E;
+  --md-primary-fg-color--dark: #0AC18E;
+  --md-accent-fg-color--dark: #00DB9E;
+  margin-top: 12px;
+}
