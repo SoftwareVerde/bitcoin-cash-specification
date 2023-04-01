@@ -1,3 +1,8 @@
+---
+hide:
+  - navigation
+---
+
 # Contributors
 
 This specification was initially created by [Software Verde, LLC](https://softwareverde.com/), the creators of Bitcoin Verde, in association with [Bitcoin Unlimited](https://www.bitcoinunlimited.info/) which provided both funding and content to ensure this project's success.

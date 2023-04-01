@@ -1,6 +1,6 @@
 # Network Protocol Version History
 | Version Number | Proposed In | Released | Summary |
-|--|--|---|
+|--|--|--|---|
 |||Aug 2017| Bitcoin Cash hard fork.|
 |70 015|[BIP-0152](/history/bips)|Jun 2017<BR>Bitcoin Core 0.14.2|Modified banning behaviour for invalid compact blocks.|
 |70 012| [BIP-0130](/history/bips)|Nov 2016<BR>Bitcoin Core 0.12.0| Added `sendheaders` message.|

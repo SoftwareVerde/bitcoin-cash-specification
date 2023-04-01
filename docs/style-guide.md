@@ -1,3 +1,8 @@
+---
+hide:
+  - navigation
+---
+
 # Style Guide
 
 This page lays out the rules for contributing to the Bitcoin Cash specification.

@@ -1,3 +1,8 @@
+---
+hide:
+  - navigation
+---
+
 # Project History
 
 The Bitcoin Cash Protocol has evolved since its inception by Satoshi Nakamoto in 2009.

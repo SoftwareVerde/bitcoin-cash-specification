@@ -1,3 +1,8 @@
+---
+hide:
+  - navigation
+---
+
 # Target Audience
 
 This specification is intended to meet a variety of needs, depending on their level of comfort with the material involved.
