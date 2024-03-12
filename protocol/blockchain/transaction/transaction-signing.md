@@ -87,7 +87,7 @@ The following table specifies, in detail, the preimage format for a signature wi
 | sequence numbers hash | 32 bytes | hash<sup>[(BE)](/protocol/misc/endian/big)</sup> | A double SHA-256 hash of the set of sequence numbers of the inputs of the transaction.  See [Sequence Numbers](#sequence-numbers-hash) for the hash preimage format.<br/><br/>If hash type is "ANYONECANPAY", "SINGLE", or "NONE" then this is all `0x00` bytes.  |
 | previous output hash | 32 bytes | hash<sup>[(LE)](/protocol/misc/endian/little)</sup> | The transaction ID of the previous output being spent. |
 | previous output index | 4 bytes | unsigned integer<sup>[(LE)](/protocol/misc/endian/little)</sup> | The index of the output to be spent. |
-| previous output token contents | variable | [token serialization](../transaction#token-output-format) | Previous output's token contents, including the PREFIX_TOKEN byte as the start. |
+| \[previous output token contents\] | \[variable\] | [token serialization](../transaction#token-output-format) | Previous output's token contents, including the PREFIX_TOKEN byte as the start. If the previous output doesn't have tokens then this is omitted. |
 | modified locking script length | variable | [variable length integer](/protocol/format/variable-length-integer) | The number of bytes for `modified_locking_script`. |
 | modified locking script | `modified_locking_script_length` bytes | bytes<sup>[(BE)](/protocol/misc/endian/big)</sup> | The subset of the locking script used for signing.  See [Modified Locking Script](#modified-locking-script) |
 | previous output value | 8 bytes | unsigned integer<sup>[(LE)](/protocol/misc/endian/little)</sup> | The value of the transaction output being spent. |
