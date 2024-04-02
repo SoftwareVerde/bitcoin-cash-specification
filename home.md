@@ -29,7 +29,6 @@
 ### Network upgrades
 
 #### Pre-BCH
-
 | Year (Creation) | BIPs |
 |------|-------|
 | 2012 | [Bip-16](/protocol/forks/bip-0016) — [Bip-34](/protocol/forks/bip-0034) — [BIP-35](/protocol/forks/bip-0035) — [Bip-37](/protocol/forks/bip-0037) |
@@ -47,6 +46,7 @@
 | 2020 | [HF-20200515](/protocol/forks/hf-20200515) — [HF-20201115](/protocol/forks/hf-20201115) |
 | 2021 | [HF-20210515](/protocol/forks/hf-20210515) |
 | 2022 | [HF-20220515](/protocol/forks/hf-20220515) |
+| 2023 | [HF-20230515](/protocol/forks/hf-20230515) |
 
 ### Network protocol
 [Network Messages](/protocol/network/messages) — [Handshake](/protocol/network/node-handshake)
