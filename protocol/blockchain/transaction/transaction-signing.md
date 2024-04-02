@@ -13,12 +13,14 @@ However, there are a number of issues with signing a transaction that must be ad
 
 Points (1) and (2) mean that if the signature is changed, the transaction's hash will change.
 Points (2) and (3) mean that the data that the signature hash preimage (i.e. the data that is hashed and signed) must not be the full transaction data.
-In addition, because signatures relate only to a single input to a transaction (i.e. spending an unspent transaction output or UTXO) the may be multiple signatures in a transaction potentially created by different private keys, or even different people.
+In addition, because signatures relate only to a single input to a transaction (i.e. spending an unspent transaction output or UTXO) there may be multiple signatures in a transaction potentially created by different private keys, or even different people.
 
 As a consequence of these factors, signatures have more parameters than may be immediately obvious, and the details of how signatures are generated can be, and have been, changed in a number of ways.
 These parameters are encoded in the [Hash Type](#hash-type).
 
 In addition, as a part of [BCH-UAHF](/protocol/forks/bch-uahf) (activated in block 478,559), the transaction signed format changed from the legacy [Bitcoin Core (BTC) method](#bitcoin-core-signatures) to the [Bitcoin Cash (BCH) Signatures](#bitcoin-cash-signatures).  In both cases, there is a signature preimage format (input) and a signature format (output).
+
+With [HF-20230515](/protocol/forks/hf-20230515) protocol upgrade, the signature preimage format was extended to include spent and new outputs's token data, and a new hash type `SIGHASH_UTXOS` was introduced so signatures can commit to whole input's prevouts.
 
 ### Hash Type
 
@@ -36,19 +38,23 @@ In conjunction with the above values, the higher-order bits act as a bitmask wit
 
 | Bit | Meaning |
 |--|--|
+| `0x00000020` | `SIGHASH_UTXOS`.  If set, the hash of whole UTXOs is inserted in the signing serialization algorithm immediately following hash of the previous outputs references. The hash is a 32-byte double SHA256 of the serialization of all referenced UTXOs, concatenated in input order, excluding output count. |
 | `0x00000040` | `SIGHASH_FORKID`.  If set, indicates that this signature is for a Bitcoin Cash transaction.  Required following BCH-UAHF, to prevent transactions from being valid on both the BTC and BCH chains. |
 | `0x00000080` | `SIGHASH_ANYONECANPAY`.  Indicates that only information about the input the signature is for will be included, allowing other inputs to be added without impacting the signature for the current input. |
 
 Combining these, there are 6 valid signature hash types in Bitcoin Cash.  Only the least significant byte (LSB) is shown in binary, since the rest of the bits are zero.
 
-| Signature hash type                                      | Value (hex) | LSB (bin)   |  Description                                                          |
-| -------------------------------------------------------- | ----------- | ----------- | --------------------------------------------------------------------- |
-| SIGHASH_ALL \| SIGHASH_FORKID                            | 0x00000041  | 0b01000001  | Signature applies to all inputs and outputs.                          |
-| SIGHASH_NONE \| SIGHASH_FORKID                           | 0x00000042  | 0b01000010  | Signature applies to all inputs and none of the outputs.              |
-| SIGHASH_SINGLE \| SIGHASH_FORKID                         | 0x00000043  | 0b01000011  | Signature applies to all inputs and the output with the same index.   |
-| SIGHASH_ALL \| SIGHASH_ANYONECANPAY \| SIGHASH_FORKID    | 0x000000C1  | 0b11000001  | Signature applies to its own input and all outputs.                   |
-| SIGHASH_NONE \| SIGHASH_ANYONECANPAY \| SIGHASH_FORKID   | 0x000000C2  | 0b11000010  | Signature applies to its own input and none of the outputs.           |
-| SIGHASH_SINGLE \| SIGHASH_ANYONECANPAY \| SIGHASH_FORKID | 0x000000C3  | 0b11000011  | Signature applies to its own input and the output with the same index.|
+| Signature hash type                                      | Value (hex) | LSB (bin)  |  Description |
+| -------------------------------------------------------- | ----------- | ---------- | ------------ |
+| SIGHASH_ALL \| SIGHASH_FORKID                            | 0x00000041  | 0b01000001 | Signature applies to all inputs and outputs. |
+| SIGHASH_NONE \| SIGHASH_FORKID                           | 0x00000042  | 0b01000010 | Signature applies to all inputs and none of the outputs. |
+| SIGHASH_SINGLE \| SIGHASH_FORKID                         | 0x00000043  | 0b01000011 | Signature applies to all inputs and the output with the same index. |
+| SIGHASH_ALL \| SIGHASH_UTXOS \| SIGHASH_FORKID           | 0x00000061  | 0b01100001 | Signature applies to all inputs and outputs. Signature preimage includes a hash of all referenced UTXOs. |
+| SIGHASH_NONE \| SIGHASH_UTXOS \| SIGHASH_FORKID          | 0x00000062  | 0b01100010 | Signature applies to all inputs and none of the outputs. Signature preimage includes a hash of all referenced UTXOs. |
+| SIGHASH_SINGLE \| SIGHASH_UTXOS \| SIGHASH_FORKID        | 0x00000063  | 0b01100011 | Signature applies to all inputs and the output with the same index. Signature preimage includes a hash of all referenced UTXOs. |
+| SIGHASH_ALL \| SIGHASH_ANYONECANPAY \| SIGHASH_FORKID    | 0x000000C1  | 0b11000001 | Signature applies to its own input and all outputs. |
+| SIGHASH_NONE \| SIGHASH_ANYONECANPAY \| SIGHASH_FORKID   | 0x000000C2  | 0b11000010 | Signature applies to its own input and none of the outputs. |
+| SIGHASH_SINGLE \| SIGHASH_ANYONECANPAY \| SIGHASH_FORKID | 0x000000C3  | 0b11000011 | Signature applies to its own input and the output with the same index. |
 
 ## Bitcoin Cash Signatures
 
@@ -60,24 +66,28 @@ At a high level, the preimage format for a signature within a single input is a 
 
 1. Transaction version
 2. Previous transaction outputs identifiers
-3. Transaction input sequence numbers
-4. The identifier of the output being spent
-5. The locking script of the output being spent
-6. The value of the output being spent
-7. The sequence number of the transaction input
-8. The created transaction outputs
-9. Transaction locktime
-10. The signature hash type
+3. If `SIGHASH_UTXOS` is set, whole content of all previous transaction outputs
+4. Transaction input sequence numbers
+5. The identifier of the output being spent
+6. Token content of the output being spent
+7. The locking script of the output being spent
+8. The value of the output being spent
+9. The sequence number of the transaction input being spent
+10. The created transaction outputs
+11. Transaction locktime
+12. The signature hash type
 
 The following table specifies, in detail, the preimage format for a signature within a single input:
 
 | Field | Length | Format | Description |
 |--|--|--|--|
 | transaction version | 4 bytes | unsigned integer<sup>[(LE)](/protocol/misc/endian/little)</sup> | The value of transaction's version field. |
-| previous outputs hash | 32 bytes | hash<sup>[(BE)](/protocol/misc/endian/big)</sup> | A double SHA-256 hash of the set of previous outputs spent by the inputs of the transaction.  See [Previous Outputs](#previous-outputs-hash) for the hash preimage format.<br/><br/>If hash type is "ANYONECANPAY" then this is all `0x00` bytes.  |
+| previous outputs identifiers hash | 32 bytes | hash<sup>[(BE)](/protocol/misc/endian/big)</sup> | A double SHA-256 hash of the set of previous outputs identifiers (source transaction hash and output index) spent by the inputs of the transaction. See [Previous Outputs Identifiers](#previous-outputs-identifiers-hash) for the hash preimage format.<br/><br/>If hash type is "ANYONECANPAY" then this is all `0x00` bytes. |
+| \[previous outputs hash\] | \[32 bytes\] | hash<sup>[(BE)](/protocol/misc/endian/big)</sup> | A double SHA-256 hash of the set of previous outputs spent by the inputs of the transaction. [Whole contents](../transaction#transaction-output) of the referenced outputs are concantenated and hashed. See [Previous Outputs](#previous-outputs-hash) for the hash preimage format.<br/><br/>If hash type doesn't have the "UTXOS" bit set, then this hash is omitted. |
 | sequence numbers hash | 32 bytes | hash<sup>[(BE)](/protocol/misc/endian/big)</sup> | A double SHA-256 hash of the set of sequence numbers of the inputs of the transaction.  See [Sequence Numbers](#sequence-numbers-hash) for the hash preimage format.<br/><br/>If hash type is "ANYONECANPAY", "SINGLE", or "NONE" then this is all `0x00` bytes.  |
 | previous output hash | 32 bytes | hash<sup>[(LE)](/protocol/misc/endian/little)</sup> | The transaction ID of the previous output being spent. |
 | previous output index | 4 bytes | unsigned integer<sup>[(LE)](/protocol/misc/endian/little)</sup> | The index of the output to be spent. |
+| \[previous output token contents\] | \[variable\] | [token serialization](../transaction#token-output-format) | Previous output's token contents, including the PREFIX_TOKEN byte as the start. If the previous output doesn't have tokens then this is omitted. |
 | modified locking script length | variable | [variable length integer](/protocol/format/variable-length-integer) | The number of bytes for `modified_locking_script`. |
 | modified locking script | `modified_locking_script_length` bytes | bytes<sup>[(BE)](/protocol/misc/endian/big)</sup> | The subset of the locking script used for signing.  See [Modified Locking Script](#modified-locking-script) |
 | previous output value | 8 bytes | unsigned integer<sup>[(LE)](/protocol/misc/endian/little)</sup> | The value of the transaction output being spent. |
@@ -86,7 +96,7 @@ The following table specifies, in detail, the preimage format for a signature wi
 | transaction lock time | 4 bytes | unsigned integer<sup>[(LE)](/protocol/misc/endian/little)</sup> | The lock time of the transaction. |
 | hash type | 4 bytes | [Hash Type](#hash-type)<sup>[(LE)](/protocol/misc/endian/little)</sup> | Flags indicating the rules for how this signature was generated. |
 
-#### Previous Outputs Hash
+#### Previous Outputs Identifiers Hash
 
 The double-SHA256-hash of the following data is used.
 
@@ -97,6 +107,24 @@ For each transaction input in the transaction, append the following information:
 | previous transaction hash | 32 bytes | bytes<sup>[(LE)](/protocol/misc/endian/little)</sup> | The hash of the transaction that generated the output to be spent. |
 | output index | 4 bytes | unsigned integer<sup>[(LE)](/protocol/misc/endian/little)</sup> | The index of the output to be spent from the specified transaction. |
 
+#### Previous Outputs Hash
+
+The double-SHA256-hash of the following data is used.
+
+For each transaction input in the transaction, append the following information:
+
+| Field | Length | Format | Description |
+|--|--|--|--|
+| value | 8 bytes | unsigned integer<sup>[(LE)](/protocol/misc/endian/little)</sup> | The number of satoshis to be transferred. |
+| \[token prefix and\] locking script length | variable | [variable length integer](/protocol/formats/variable-length-integer) | If the output contains tokens then the combined size of full token prefix and the locking script in bytes, else just the locking script size in bytes. |
+| \[PREFIX_TOKEN\] | 1 byte | constant | Magic byte defined at codepoint 0xef (239) and indicates the presence of a token prefix. |
+| \[token category ID\] | 32 bytes | bytes | After the PREFIX_TOKEN byte, a 32-byte "token category ID" is required, encoded in OP_HASH256 byte order. |
+| \[token bitfield\] | 1 byte | bitfield | A bitfield encoding two 4-bit fields is required. |
+| \[NFT commitment length\] | variable | [variable length integer](/protocol/formats/variable-length-integer) | The size of the NFT commitment in bytes. Present only if token bitfield bit 0x40 is set. |
+| \[NFT commitment\] | variable | bytes | The contents of the NFT commitment. Present only if token bitfield bit 0x40 is set. |
+| \[FT amount\] | variable | [variable length integer](/protocol/formats/variable-length-integer) | An amount of fungible tokens, present only if token bitfield bit `0x10` is set. |
+| locking script | variable | bytes<sup>[(BE)](/protocol/misc/endian/big)</sup> | The contents of the locking script. |
+
 #### Sequence Numbers Hash
 
 The double-SHA256-hash of the following data is used.
@@ -106,6 +134,19 @@ For each transaction input in the transaction, append the following information:
 | Field | Length | Format | Description |
 |--|--|--|--|
 | sequence number | 4 bytes | unsigned integer<sup>[(LE)](/protocol/misc/endian/little)</sup> | The sequence number field of the transaction input. |
+
+#### Token Contents
+
+If the output being spent has tokens, append the following information:
+
+| Field | Length | Format | Description |
+|--|--|--|--|
+| PREFIX_TOKEN | 1 byte | constant | Magic byte defined at codepoint 0xef (239) and indicates the presence of a token prefix. |
+| token category ID | 32 bytes | bytes | After the PREFIX_TOKEN byte, a 32-byte "token category ID" is required, encoded in OP_HASH256 byte order. |
+| token bitfield | 1 byte | bitfield | A bitfield encoding two 4-bit fields is required. |
+| \[NFT commitment length\] | variable | [variable length integer](/protocol/formats/variable-length-integer) | The size of the NFT commitment in bytes. Present only if token bitfield bit 0x40 is set. |
+| \[NFT commitment\] | variable | bytes | The contents of the NFT commitment. Present only if token bitfield bit 0x40 is set. |
+| \[FT amount\] | variable | [variable length integer](/protocol/formats/variable-length-integer) | An amount of fungible tokens, present only if token bitfield bit `0x10` is set. |
 
 #### Modified Locking Script
 
@@ -136,7 +177,13 @@ For each transaction output to be signed (per the hash mode), append the followi
 | Field | Length | Format | Description |
 |--|--|--|--|
 | value | 8 bytes | unsigned integer<sup>[(LE)](/protocol/misc/endian/little)</sup> | The number of satoshis to be transferred. |
-| locking script length | variable | [variable length integer](/protocol/formats/variable-length-integer) | The size of the locking script in bytes. |
+| \[token prefix and\] locking script length | variable | [variable length integer](/protocol/formats/variable-length-integer) | If the output contains tokens then the combined size of full token prefix and the locking script in bytes, else just the locking script size in bytes. |
+| \[PREFIX_TOKEN\] | 1 byte | constant | Magic byte defined at codepoint 0xef (239) and indicates the presence of a token prefix. |
+| \[token category ID\] | 32 bytes | bytes | After the PREFIX_TOKEN byte, a 32-byte "token category ID" is required, encoded in OP_HASH256 byte order. |
+| \[token bitfield\] | 1 byte | bitfield | A bitfield encoding two 4-bit fields is required. |
+| \[NFT commitment length\] | variable | [variable length integer](/protocol/formats/variable-length-integer) | The size of the NFT commitment in bytes. Present only if token bitfield bit 0x40 is set. |
+| \[NFT commitment\] | variable | bytes | The contents of the NFT commitment. Present only if token bitfield bit 0x40 is set. |
+| \[FT amount\] | variable | [variable length integer](/protocol/formats/variable-length-integer) | An amount of fungible tokens, present only if token bitfield bit `0x10` is set. |
 | locking script | variable | bytes<sup>[(BE)](/protocol/misc/endian/big)</sup> | The contents of the locking script. |
 
 ### Signature Format
