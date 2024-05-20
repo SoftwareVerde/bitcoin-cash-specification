@@ -35,7 +35,10 @@ The coinbase message is provided in the inputs unlocking script.
 The unlocking script is required to begin with a push of the block height which can then be followed why whatever data is desired.
 The block height encoded as a variable-length, little-endian integer.
 The [OP_DATA_X](/protocol/blockchain/script/op-codes/op-data-x) operation is used to push the necessary number of bytes to encode the length.
-This requirement was added with version 2 blocks as a part of [BIP-34](/protocol/forks/bip-0034).
+This requirement was added with version 2 blocks as a part of [BIP-34](/protocol/forks/bip-0034). 
+As per [HF-20191115](/protocol/forks/hf-20191115), the block height included in the unlocking script should also be minimally encoded. 
+This consensus is currently enforced by several node implementations, including Bitcoin Cash Node, Bitcoin Verde, and Flowee the Hub. 
+Other node implementations including BCHD, and Bitcoin Unlimited, will if the block height is included in the coinbase transaction but would not check if the included block height is minimally encoded.  
 
 Each coinbase transaction may only have one transaction input.
 
